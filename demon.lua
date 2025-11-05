@@ -10143,7 +10143,7 @@ Tab16:AddButton({
     Name = "Painel Admin",
     Description = "Carregar painel administrativo",
     Callback = function()
-        loadstring(game:HttpGet("https://ghostbin.axel.org/paste/mj38b/raw"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TheAnnonimated/lynxwrapperss/refs/heads/main/dpainelwr.lua))()
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "Painel Admin",
             Text = "Painel administrativo carregado!",
