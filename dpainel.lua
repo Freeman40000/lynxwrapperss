@@ -83,6 +83,7 @@ local WhitelistData = {
     ["ensisbsjbrhe"] = {type = "Usuário add", expires = parseDateTime("09/10/2030 19:40")},
     ["gui_neh1023"] = {type = "Usuário add", expires = parseDateTime("09/10/2030 19:40")},
     ["killert_494"] = {type = "Usuário add", expires = parseDateTime("09/10/2030 19:40")},
+    ["ShiniderT10"] = {type = "Usuário add", expires = nil},
 }
 
 -- Função para verificar se usuário está na whitelist e não expirou
