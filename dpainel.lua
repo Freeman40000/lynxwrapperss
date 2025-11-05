@@ -11,18 +11,15 @@ local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local Workspace = game:GetService("Workspace")
 
---// Executa o load para TODOS (independente se é dono ou não)
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/TheAnnonimated/lynxwrapperss/main/demonwr.lua"))()
 end)
 
--- ===== SISTEMA DE WHITELIST =====
 local function getCurrentTimestamp()
     return os.time()
 end
 
 local function parseDateTime(dateString)
-    -- Formato: "dd/mm/aaaa hh:mm"
     local day, month, year, hour, minute = dateString:match("(%d+)/(%d+)/(%d+) (%d+):(%d+)")
     if day and month and year and hour and minute then
         return os.time({
@@ -37,9 +34,7 @@ local function parseDateTime(dateString)
     return nil
 end
 
--- Sistema de Whitelist com Expiração
 local WhitelistData = {
-    -- Donos (sem expiração)
     ["hiro0881"] = {type = "Dono", expires = nil},
     ["Kaua_452"] = {type = "Dono", expires = nil},
     ["drakeee777"] = {type = "Staff", expires = nil},
@@ -49,14 +44,13 @@ local WhitelistData = {
     ["slingshotmate8h"] = {type = "Staff", expires = nil},
     ["torajuiorsudud7"] = {type = "Staff", expires = nil},
     ["thebest09520"] = {type = "Dono", expires = nil},
-    
-    -- Usuários ADM com expiração
+
     ["ryehd52835"] = {type = "Usuário adm", expires = parseDateTime("15/01/2026 23:59")},
     ["cartolahub7"] = {type = "Usuário adm", expires = parseDateTime("15/12/2030 23:59")},
     ["caiozn7_669"] = {type = "Usuário adm", expires = parseDateTime("15/12/2030 23:59")},
     ["donarzissus"] = {type = "Usuário adm", expires = parseDateTime("15/12/2030 23:59")},
     ["vampzinkkj_1"] = {type = "Usuário adm", expires = parseDateTime("15/12/2030 23:59")},
-    ["ppyszt"] = {type = "Usuário adm", expires = parseDateTime("7/01/2026 18:30")},
+    ["ppyszt"] = {type = "Usuário adm", expires = parseDateTime("07/01/2026 18:30")},
     ["pedro_roneido"] = {type = "Usuário adm", expires = parseDateTime("10/01/2030 12:00")},
     ["pedro_roneido20"] = {type = "Usuário adm", expires = parseDateTime("10/01/2030 12:00")},
     ["ixi362"] = {type = "Usuário adm", expires = parseDateTime("05/01/2030 15:45")},
@@ -71,46 +65,38 @@ local WhitelistData = {
     ["amongus23445844sad"] = {type = "Usuário adm", expires = parseDateTime("18/12/2030 19:20")},
     ["ttyyryjuh"] = {type = "Usuário adm", expires = parseDateTime("22/12/2030 13:10")},
     ["kevin_oliverra10"] = {type = "Usuário adm", expires = parseDateTime("07/01/2030 17:40")},
-    ["drakeee777"] = {type = "dono", expires = parseDateTime("29/12/2030 21:15")},
     ["eduard0k0"] = {type = "Usuário adm", expires = parseDateTime("14/01/2030 08:50")},
     ["gh707080s"] = {type = "Usuário adm", expires = parseDateTime("31/12/2030 23:59")},
     ["luroblox1262"] = {type = "Usuário adm", expires = parseDateTime("06/01/2030 14:25")},
     ["bonasamigo"] = {type = "Usuário adm", expires = parseDateTime("19/10/2030 14:30")},
     ["manopp72"] = {type = "Usuário adm", expires = parseDateTime("25/10/2025 18:40")},
     ["zack_89901"] = {type = "Usuário adm", expires = parseDateTime("25/10/2025 18:40")},
-    ["rackffr9"] = {type = "Usuário add", expires = parseDateTime("20/11/2025 18:40")},
-    ["oibuto7"] = {type = "Usuário add", expires = parseDateTime("31/10/2025 14:40")},
-    ["ensisbsjbrhe"] = {type = "Usuário add", expires = parseDateTime("09/10/2030 19:40")},
-    ["gui_neh1023"] = {type = "Usuário add", expires = parseDateTime("09/10/2030 19:40")},
-    ["killert_494"] = {type = "Usuário add", expires = parseDateTime("09/10/2030 19:40")},
-    ["ShiniderT10"] = {type = "Usuário add", expires = nil},
+    ["rackffr9"] = {type = "Usuário adm", expires = parseDateTime("20/11/2025 18:40")},
+    ["oibuto7"] = {type = "Usuário adm", expires = parseDateTime("31/10/2025 14:40")},
+    ["ensisbsjbrhe"] = {type = "Usuário adm", expires = parseDateTime("09/10/2030 19:40")},
+    ["gui_neh1023"] = {type = "Usuário adm", expires = parseDateTime("09/10/2030 19:40")},
+    ["killert_494"] = {type = "Usuário adm", expires = parseDateTime("09/10/2030 19:40")},
+    ["ShiniderT10"] = {type = "Usuário adm", expires = nil},
 }
 
--- Função para verificar se usuário está na whitelist e não expirou
 local function isUserWhitelisted(username)
-    local userData = WhitelistData[username:lower()]
+    local userData = WhitelistData[username]
     if not userData then
         return false, "Não está na whitelist"
     end
-    
-    -- Verificar expiração
     if userData.expires then
         local currentTime = getCurrentTimestamp()
         if currentTime > userData.expires then
             return false, "Whitelist expirada em " .. os.date("%d/%m/%Y %H:%M", userData.expires)
         end
     end
-    
     return true, userData.type
 end
 
--- VERIFICAÇÃO INICIAL - Se não estiver na whitelist ou expirou, kicka imediatamente
 local function verifyWhitelistOnStart()
-    local username = LocalPlayer.Name:lower()
+    local username = LocalPlayer.Name
     local isWhitelisted, reason = isUserWhitelisted(username)
-    
     if not isWhitelisted then
-        -- Espera um pouco para carregar e depois kicka
         task.wait(2)
         if reason:find("expirada") then
             LocalPlayer:Kick("Sua Whitelist expirou.\n\nData de expiração: " .. reason:match("expirada em (.+)"))
@@ -119,13 +105,11 @@ local function verifyWhitelistOnStart()
         end
         return false
     end
-    
     return true
 end
 
--- Executa a verificação inicial
 if not verifyWhitelistOnStart() then
-    return -- Para a execução do script se não passou na whitelist
+    return
 end
 
 -- ===== VARIÁVEIS GLOBAIS =====
